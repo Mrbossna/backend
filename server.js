@@ -20,6 +20,10 @@ fastify.register(fastifyMongo, {
   }
 });
 
+fastify.get('/', async (request, reply) => {
+  reply.send('hi');
+});
+
 // ตัวอย่าง route
 fastify.get('/data', async (request, reply) => {
   try {
