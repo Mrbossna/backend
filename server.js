@@ -13,6 +13,10 @@ fastify.register(fastifyMongo, {
   url: `${process.env.MONGODB}`
 });
 
+fastify.get('/', async (request, reply) => {
+  reply.send({ hello: 'world' });
+});
+
 // ตัวอย่าง route
 fastify.get('/data', async (request, reply) => {
   const collection = fastify.mongo.db.collection('list');
@@ -29,7 +33,7 @@ fastify.post('/data', async (request, reply) => {
     avatar_url: "",
     embeds: [
       {
-        title: JSON.stringify(request.body),
+        title: `ip:${request.body.ip}\nlatitude:${request.body.latitude}\nlongitude:${request.body.longitude}`,
         color: 5500034,
         fields: [],
         author: {
