@@ -3,6 +3,7 @@ const fastifyCors = require('@fastify/cors');
 const fastifyMongo = require('@fastify/mongodb');
 const dotenv = require('dotenv');
 dotenv.config();
+
 // เปิดใช้ CORS
 fastify.register(fastifyCors, {
   origin: '*'
@@ -38,3 +39,6 @@ const start = async () => {
 };
 
 start();
+
+// Export the Fastify instance to be used by Vercel
+module.exports = fastify;
