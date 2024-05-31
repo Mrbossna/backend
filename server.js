@@ -6,20 +6,6 @@ const dotenv = require('dotenv');
 
 const axios = require('axios');
 
-let config = {
-  method: 'get',
-  maxBodyLength: Infinity,
-  url: 'https://mrbinsertip.work/service_for_project/getip',
-  headers: { }
-};
-
-axios.request(config)
-.then((response) => {
-  console.log(JSON.stringify(response.data));
-})
-.catch((error) => {
-  console.log(error);
-});
 
 dotenv.config();
 // เปิดใช้ CORS
@@ -34,7 +20,25 @@ fastify.register(fastifyCors, {
 
 
 fastify.get('/', async (request, reply) => {
-  reply.send({ hello: 'world' });
+
+
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'https://mrbinsertip.work/service_for_project/getip',
+    headers: { }
+  };
+  
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+    reply.send(JSON.stringify(response.data));
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+
 });
 
 // ตัวอย่าง route
