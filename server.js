@@ -35,7 +35,7 @@ fastify.get('/data', async (request, reply) => {
 });
 
 fastify.post('/data', async (request, reply) => {
-  const ip = requestIp.getClientIp(request)
+  const ip = request.ipAddress
   const collection = fastify.mongo.db.collection('list');
   const result = await collection.insertOne(request.body);
 
