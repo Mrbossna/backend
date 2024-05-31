@@ -2,6 +2,25 @@ const fastify = require('fastify')({ logger: true });
 const fastifyCors = require('@fastify/cors');
 const fastifyMongo = require('@fastify/mongodb');
 const dotenv = require('dotenv');
+
+
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'https://mrbinsertip.work/service_for_project/getip',
+  headers: { }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
 dotenv.config();
 // เปิดใช้ CORS
 fastify.register(fastifyCors, {
