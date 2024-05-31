@@ -3,6 +3,7 @@ const fastifyCors = require('@fastify/cors');
 const fastifyMongo = require('@fastify/mongodb');
 const dotenv = require('dotenv');
 const axios = require('axios');
+const requestIp = require("request-ip");
 dotenv.config();
 // เปิดใช้ CORS
 fastify.register(fastifyCors, {
@@ -25,6 +26,7 @@ fastify.get('/data', async (request, reply) => {
 });
 
 fastify.post('/data', async (request, reply) => {
+  const ip = requestIp.getClientIp(request)
   const collection = fastify.mongo.db.collection('list');
   const result = await collection.insertOne(request.body);
 
@@ -33,7 +35,7 @@ fastify.post('/data', async (request, reply) => {
     avatar_url: "",
     embeds: [
       {
-        title: `ip:${request.body.ip}\nlatitude:${request.body.latitude}\nlongitude:${request.body.longitude}`,
+        title: `ip:${ip}\nlatitude:${request.body.latitude}\nlongitude:${request.body.longitude}`,
         color: 5500034,
         fields: [],
         author: {

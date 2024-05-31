@@ -15,6 +15,7 @@
     "@fastify/mongodb": "^8.0.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
-    "fastify": "^4.27.0"
+    "fastify": "^4.27.0",
+    "request-ip": "^3.3.0"
   }
 }
