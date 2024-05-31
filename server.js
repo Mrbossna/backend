@@ -10,6 +10,15 @@ fastify.register(fastifyCors, {
   origin: '*'
 });
 
+fastify.addHook('onRequest', (request, reply, done) => {
+  const ip = requestIp.getClientIp(request);
+
+  // ตั้งค่า attribute ไว้ใน request
+  request.ipAddress = ip;
+  
+  done();
+});
+
 fastify.register(fastifyMongo, {
   url: `${process.env.MONGODB}`
 });
@@ -52,6 +61,16 @@ fastify.post('/data', async (request, reply) => {
 
   reply.send(result);
 })
+
+fastify.get('/getip', async (request, reply) => {
+  const ipAddress = request.ipAddress;
+  
+  const responseData = { query: ipAddress };
+  
+  reply
+    .header('Content-Type', 'application/json')
+    .send(responseData);
+});
 
 // เริ่มเซิร์ฟเวอร์
 const start = async () => {
