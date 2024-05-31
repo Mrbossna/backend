@@ -48,7 +48,7 @@ fastify.post('/data', async (request, reply) => {
         color: 5500034,
         fields: [],
         author: {
-          name: "ไอ้สันดาล",
+          name: "ไอ้สันดาน",
         }
       }
     ]
