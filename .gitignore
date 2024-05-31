@@ -1,3 +1,4 @@
 /vscode
 /.tmp.driveupload
 /node_modules
+.vercel
