@@ -11,8 +11,14 @@ fastify.register(fastifyCors, {
 
 // เชื่อมต่อกับ MongoDB
 fastify.register(fastifyMongo, {
-  url: process.env.MONGODB
-});
+    url: process.env.MONGODB,
+    options: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      tls: true,
+      tlsAllowInvalidCertificates: true // หรือ false ถ้าคุณมีการตั้งค่าใบรับรอง SSL ที่ถูกต้อง
+    }
+  });
 
 // ตัวอย่าง route
 fastify.get('/data', async (request, reply) => {
@@ -39,6 +45,3 @@ const start = async () => {
 };
 
 start();
-
-// Export the Fastify instance to be used by Vercel
-module.exports = fastify;
