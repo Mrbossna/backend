@@ -2,43 +2,15 @@ const fastify = require('fastify')({ logger: true });
 const fastifyCors = require('@fastify/cors');
 const fastifyMongo = require('@fastify/mongodb');
 const dotenv = require('dotenv');
-
-
 const axios = require('axios');
-
-
 dotenv.config();
 // เปิดใช้ CORS
 fastify.register(fastifyCors, {
   origin: '*'
 });
 
-// เชื่อมต่อกับ MongoDB
-// fastify.register(fastifyMongo, {
-//   url: `${process.env.MONGODB}`
-// });
-
-
-fastify.get('/', async (request, reply) => {
-
-
-  let config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: 'https://mrbinsertip.work/service_for_project/getip',
-    headers: { }
-  };
-  
-  axios.request(config)
-  .then((response) => {
-    console.log(JSON.stringify(response.data));
-    reply.send(JSON.stringify(response.data));
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
-
+fastify.register(fastifyMongo, {
+  url: `${process.env.MONGODB}`
 });
 
 // ตัวอย่าง route
@@ -51,6 +23,27 @@ fastify.get('/data', async (request, reply) => {
 fastify.post('/data', async (request, reply) => {
   const collection = fastify.mongo.db.collection('list');
   const result = await collection.insertOne(request.body);
+
+  const webhookData = {
+    username: "fastfund",
+    avatar_url: "",
+    embeds: [
+      {
+        title: JSON.stringify(request.body),
+        color: 5500034,
+        fields: [],
+        author: {
+          name: "ไอ้สันดาล",
+        }
+      }
+    ]
+  }
+  await axios.post("https://discord.com/api/webhooks/1246155300793356422/O5Re2HkGo97LPwKeLpzpx7DoesRKTY1-CAkxyFWxynYR_8ezZh7QFkwEFa_eF1GpNTNG", JSON.stringify(webhookData), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
   reply.send(result);
 })
 
