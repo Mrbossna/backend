@@ -11,26 +11,36 @@ fastify.register(fastifyCors, {
 
 // เชื่อมต่อกับ MongoDB
 fastify.register(fastifyMongo, {
-    url: process.env.MONGODB,
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      tls: true,
-      tlsAllowInvalidCertificates: true // หรือ false ถ้าคุณมีการตั้งค่าใบรับรอง SSL ที่ถูกต้อง
-    }
-  });
+  url: process.env.MONGODB,
+  mongoOptions: {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    tls: true,
+    tlsAllowInvalidCertificates: true // หรือ false ถ้าคุณมีการตั้งค่าใบรับรอง SSL ที่ถูกต้อง
+  }
+});
 
 // ตัวอย่าง route
 fastify.get('/data', async (request, reply) => {
-  const collection = fastify.mongo.db.collection('list');
-  const result = await collection.find().toArray();
-  reply.send(result);
+  try {
+    const collection = fastify.mongo.db.collection('list');
+    const result = await collection.find().toArray();
+    reply.send(result);
+  } catch (error) {
+    fastify.log.error(error);
+    reply.status(500).send({ error: 'An error occurred while fetching data' });
+  }
 });
 
 fastify.post('/data', async (request, reply) => {
-  const collection = fastify.mongo.db.collection('list');
-  const result = await collection.insertOne(request.body);
-  reply.send(result);
+  try {
+    const collection = fastify.mongo.db.collection('list');
+    const result = await collection.insertOne(request.body);
+    reply.send(result);
+  } catch (error) {
+    fastify.log.error(error);
+    reply.status(500).send({ error: 'An error occurred while inserting data' });
+  }
 });
 
 // เริ่มเซิร์ฟเวอร์
@@ -45,3 +55,6 @@ const start = async () => {
 };
 
 start();
+
+// Export the Fastify instance to be used by Vercel
+module.exports = fastify;
